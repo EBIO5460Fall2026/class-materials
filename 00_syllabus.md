@@ -33,7 +33,7 @@ Dynamic process models are widely used in ecology and evolution and are a corner
 
 Examples from ecology and evolution are used throughout
 
-### Weeks 1-3
+### Weeks 1-4
 
 * Introduction
     * Data-generating processes
@@ -55,7 +55,7 @@ Examples from ecology and evolution are used throughout
     * Gillespie algorithm for continuous-time processes
         * rates and exponential waiting times for discrete events
 
-### Weeks 4-6
+### Weeks 5-7
 
 * Scaling up and emergence
     * From stochastic individuals to difference equations (discrete time)
@@ -82,7 +82,7 @@ Examples from ecology and evolution are used throughout
     * Model comparison
     * Model checking algorithms
 
-### Weeks 7-9
+### Weeks 8-10
 
 * Model analysis and simplification
     * Dimensional analysis and scaling
@@ -115,7 +115,7 @@ Examples from ecology and evolution are used throughout
     * Empirical dynamic modeling
     * Machine learning meets process models (SINDy, neural differential equations)
 
-### Weeks 10-14
+### Weeks 11-15
 
   * Reading and discussion: applications in ecology and evolution
   * Individual project
