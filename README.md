@@ -13,7 +13,7 @@ Pronouns: he, him, his
 * **Zoom 944 3049 7046**, as needed and for office hours
 * Text: none, readings posted as needed
 * [Google Drive]() (TBA): anything not open access, collaborative notes etc
-* [Class recordings]() (TBA): password required, by request
+* [Class recordings](https://www.dropbox.com/scl/fo/h38o2a651o3tr3tgikn06/ACw9zokWCQ_xAQYgWcxYGkE?rlkey=a9czbyvsmfjyeg4v52xdceojj&st=1ltdub2i&dl=0): password required, by request
 * [Piazza]() (TBA): questions, discussion, coding help
 * [Zotero library]() (TBA): collection of papers
 
