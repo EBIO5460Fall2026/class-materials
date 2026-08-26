@@ -67,7 +67,7 @@ plt.xlabel("U")
 plt.ylabel("Density")
 plt.show()
 
-# As n -> Inf, the simulation approaches "truth"
+# As n -> Inf, the simulation approaches "truth" (red line)
 
 # In this algorithm, the seed cannot be zero (or the values are all zero) and
 # the sequence never visits zero
