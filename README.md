@@ -14,7 +14,7 @@ Pronouns: he, him, his
 * Text: none, readings posted as needed
 * [Google Drive]() (TBA): anything not open access, collaborative notes etc
 * [Class recordings](https://www.dropbox.com/scl/fo/h38o2a651o3tr3tgikn06/ACw9zokWCQ_xAQYgWcxYGkE?rlkey=a9czbyvsmfjyeg4v52xdceojj&st=1ltdub2i&dl=0): password required, by request
-* [Piazza]() (TBA): questions, discussion, coding help
+* [Piazza](https://piazza.com/colorado/fall2026/ebio5460002/home): questions, discussion, coding help
 * [Zotero library]() (TBA): collection of papers
 
 This repository includes lecture slides (pdf), code, and homework instructions. For the most part, where code is concerned you want to view the markdown (`.md`) files in your web browser from GitHub.com. These markdown files are knitted from the R code. You can also run the R or Python code on your computer from the `.R` or `.py` files.
