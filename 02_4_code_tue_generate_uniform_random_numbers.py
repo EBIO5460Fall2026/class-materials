@@ -28,8 +28,8 @@ for j in range(n):
 import numpy as np
 
 def rand_unif(n, seed):
-    a=16807
-    m=2147483647
+    a = 16807
+    m = 2147483647
     U = np.empty(n)
 
     I = seed
