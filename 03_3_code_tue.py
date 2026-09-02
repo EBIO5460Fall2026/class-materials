@@ -31,6 +31,8 @@ N = 100
 alive = np.full(N, 1)    #alive = 1
 p_death = np.full(N, 0.2)
 
+# Simulate the death process for each individual
+
 for i in range(N):
     U, I_state = rand_unif(1, I_state)
     if U <= p_death[i]:
@@ -49,8 +51,6 @@ def death_IBM(N, p_d, I_state):
 
     alive = np.full(N, 1)        #alive = 1
     p_death = np.full(N, p_d)
-
-    # Simulate the death process for each individual
 
     for i in range(N):
         U, I_state = rand_unif(1, I_state)
@@ -77,13 +77,14 @@ alive = np.empty((N, reps), dtype=int)
 
 for i in range(reps):
     alive[:,i], I_state = death_IBM(N, p_d, I_state)
-    # if i % 1000 == 0:  # monitoring
+    # if i % 1000 == 0:  # uncomment for monitoring
     #     print(i)
 
 print(alive)   #each simulation is one column
 
 # Each individual has its own Bernoulli distribution
-# Extract all the outcomes for individual 37
+# Extract all the outcomes for individual 37 (which is row index 37)
+# Individuals are indexed 0 - 99 (Python; offset indexing)
 
 individual = 37
 dead_int = (alive[individual, :] -1) * -1 #convert alive to dead
@@ -154,9 +155,7 @@ plt.plot(X, pmf, marker='o', linestyle='none', fillstyle='none')
 plt.title("Binomial distribution (points) vs simulation (bars)")
 plt.show()
 
-# See, it emerges from the process!
-# Now go see the slide for Binomial emerging
-
+# The binomial emerges from the underlying (biological) stochastic process!
 
 # Mean (expected value)
 
@@ -171,120 +170,3 @@ print(np.mean(N_dead))
 print(N * p_d * (1 - p_d))
 # Observed (sample variance)
 print(np.var(N_dead, ddof=1))
-
-
-
-
-
-# Modern random number generators (RNGs)
-
-# Now that we've seen a full cycle of hand-coded algorithms through to
-# agent-based simulations, this is a good point to discard our hand-coded RNG
-# and replace it with modern, ultra-reliable tools from the numpy library. One
-# can also do random generation with the SciPy library but Numpy has more modern
-# random number generation.
-
-# Numpy Uniform(0,1) random numbers
-
-# Initiate the random number generator
-# The object `rng` will keep track of its state
-
-rng = np.random.default_rng(98765)
-
-# Now use it
-
-U = rng.random(10)
-print(U)
-
-# Use it again
-
-U = rng.random(10)
-print(U)             #different set
-
-
-# Numpy Bernoulli random numbers (via Binomial with trials=1)
-
-# Initiate the random number generator (optional if previously initiated)
-
-rng = np.random.default_rng(631)
-
-draws = 10000
-p = 0.3
-
-X = rng.binomial(1, p, size=draws)
-print(X)
-print(np.mean(X)) #Expected = p
-
-
-# Numpy Binomial random numbers
-
-# Initiate the random number generator
-rng = np.random.default_rng(2293)
-
-draws = 100000
-n = 100    #number of Bernoulli trials
-p = 0.2
-
-X = rng.binomial(n, p, size=draws)
-print(X)
-print(np.mean(X)) #Expected = np
-
-
-#--------------------------------------------------------------------------------
-# Exponential distribution and event waiting times
-#--------------------------------------------------------------------------------
-
-c = 0.02         #roughly probability of death per year (so, lives ca 50 years)
-delta_t = 1/365  #years
-p = c * delta_t  #probability per day
-print(p)
-
-state = 0
-t = 0
-while state == 0:
-    t = t + delta_t
-    if ( rng.binomial(1, p, 1) ):
-        state = 1
-print(t)
-
-
-# Turn this algorithm into a function
-
-def death_continous_time(c, delta_t):
-    p = c * delta_t
-    alive = 1
-    t = 0
-    while alive:
-        t = t + delta_t
-        if ( rng.binomial(1, p, 1) ):
-            alive = 0
-    return t
-
-
-# Conduct a simulation study
-
-rng = np.random.default_rng(58773)
-
-c = 0.02
-delta_t = 1/365
-reps = 1000
-time_to_death = np.empty(reps)
-
-for i in range(reps):
-    time_to_death[i] = death_continous_time(c, delta_t)
-
-print(time_to_death)
-print(np.mean(time_to_death)) #Expected: 1 / c
-print(np.var(time_to_death, ddof=1))  #well, that's unrealistic
-
-plt.figure()
-plt.hist(time_to_death, bins=20, density=True)
-plt.xlabel("Time to death")
-plt.ylabel("Density")
-plt.show()
-
-# Expected
-t = np.linspace(0, np.max(time_to_death) + 1, 100)
-pdf = c * np.exp(-c * t)
-plt.plot(t, pdf)
-
