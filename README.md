@@ -17,6 +17,6 @@ Pronouns: he, him, his
 * [Piazza](https://piazza.com/colorado/fall2026/ebio5460002/home): questions, discussion, coding help
 * [Zotero library]() (TBA): collection of papers
 
-This repository includes lecture slides (pdf), code, and homework instructions. For the most part, where code is concerned you want to view the markdown (`.md`) files in your web browser from GitHub.com. These markdown files are knitted from the R code. You can also run the R or Python code on your computer from the `.R` or `.py` files.
+This repository includes lecture slides (pdf), code, and homework instructions. For the most part, where code is concerned you want to view the markdown (`.md`) files in your web browser from GitHub.com. These markdown files are compiled from the Python or R code. You can also run the Python or R code on your computer from the `.py` or `.R` files.
 
-This is the third semester in a graduate-level "data science for ecology and evolution" sequence. Semester 1 is [here](https://github.com/EBIO5460Fall2025/class-materials).
+This is the third semester in a graduate-level "data science for ecology and evolution" sequence. Semester 1 is [here](https://github.com/EBIO5460Fall2025/class-materials). More information on the 4 semester sequence is [here](https://www.colorado.edu/lab/melbourne/courses).
