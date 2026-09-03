@@ -23,7 +23,7 @@ U, I_state = rand_unif(1, seed=74732)
 
 # Here was our agent-based model from last time
 
-# 00 individuals
+# 100 individuals
 # Probability of death in a year = 0.2
 # How many die in the first year?
 
