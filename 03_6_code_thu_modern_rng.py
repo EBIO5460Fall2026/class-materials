@@ -86,7 +86,7 @@ plt.show()
 # Initiate the random number generator
 rng = np.random.default_rng(2293)
 
-draws = 100000
+draws = 5000
 n = 100    #number of Bernoulli trials
 p = 0.2
 
@@ -104,3 +104,4 @@ plt.xlabel("x")
 plt.ylabel("Relative frequency")
 plt.title("Binomial distribution (points) vs random draws (histogram)")
 plt.show()
+
