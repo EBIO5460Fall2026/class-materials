@@ -3,15 +3,15 @@
 
 ## Learning goals
 
-- Simulate binary stochastic events (e.g. death) in an individual-based
-  model
-- Recognize a Bernoulli distribution as the outcome (e.g. dead/alive)
-  for an individual over realizations
-- Recognize a Binomial distribution as the outcome for total events
+- Simulate **binary stochastic events** (e.g. death) in an
+  individual-based model
+- Recognize a **Bernoulli distribution** as the outcome
+  (e.g. dead/alive) for an individual over realizations
+- Recognize a **binomial distribution** as the outcome for total events
   (e.g. number of deaths) at the population scale
-- Compare simulated discrete distributions to theoretical PMFs
-- Understand how a population-level stochastic process emerges from
-  individual-level dynamics
+- Compare simulated discrete distributions to **theoretical PMFs**
+- Understand how a population-level stochastic process **emerges** from
+  individual-level dynamics via **scaling up**
 
 ## Code
 
@@ -242,9 +242,9 @@ represented completely by the **histogram** of the simulated outcomes.
 
 Sometimes, the distribution of an outcome from a simple IBM might have a
 known distribution. That is the case here. The outcome for `N_dead` (or
-`N_alive`) is a Binomial distribution.
+`N_alive`) is a binomial distribution.
 
-The Binomial distribution arises as the sum of multiple **independent**
+The binomial distribution arises as the sum of multiple **independent**
 Bernoulli trials with the **same probability**. That’s exactly what we
 had in the death simulation: each individual had the same probability of
 death $p_d$, a Bernoulli trial (binary stochastic event) occurred for
@@ -261,7 +261,7 @@ Functions for distributions in Python are in the stats module of the
 from scipy import stats
 ```
 
-Now we can plot the theoretical PMF for the Binomial distribution
+Now we can plot the theoretical PMF for the binomial distribution
 against the outcome of the individual-based simulations.
 
 ``` python
@@ -275,7 +275,7 @@ plt.title("Binomial distribution (points) vs simulation (bars)")
 src="03_3_code_tue_ibm_emrgnt_bern_binm_files/figure-commonmark/exec-plot-2-part-2-output-1.png"
 id="exec-plot-2-part-2" />
 
-They are very close. The Binomial distribution **emerges** from the
+They are very close. The binomial distribution **emerges** from the
 underlying biological stochastic process!
 
 The mean and variance of the simulated number dead are also very close
@@ -319,13 +319,15 @@ print(np.var(N_dead, ddof=1))
 
 ## Summary
 
-- Individual deaths are Bernoulli trials.
-- The outcome for a single individual follows a Bernoulli distribution.
-- The total number of deaths in the population emerges from the
+- Individual deaths are **binary stochastic events** (aka **Bernoulli
+  trials**).
+- The outcome for a single individual follows a **Bernoulli
+  distribution**.
+- The total number of deaths in the population **emerges** from the
   individual-level process.
-- The population-level outcome, number of deaths, follows a Binomial
-  distribution.
+- The population-level outcome, number of deaths, follows a **binomial
+  distribution**.
 - The simulated PMFs closely match the theoretical Bernoulli and
-  Binomial distributions.
+  binomial distributions.
 - We can sometimes replace a complex individual-based model with an
-  equivalent emergent distribution.
+  equivalent **emergent distribution**.
