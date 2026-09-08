@@ -71,12 +71,11 @@ print(sum(np.logical_not(alive))) #number dead
     85
     15
 
-### Investigate the stochastic process
+### Package IBM in a function
 
-To investigate this stochastic process, we’ll simulate the
-individual-based model multiple times.
-
-First, we’ll package the individual-based model into a function.
+To do a simulation study, we want a nice tidy package for the model so
+we can run it repeatedly. We also need to ensure the RNG is handled
+appropriately to update its state.
 
 ``` python
 def death_IBM(N, p_d, I_state):
@@ -105,8 +104,11 @@ print(sum(alive))
      1 1 1 1 0 1 1 0 1 1 1 1 1 1 1 1 0 1 0 1 1 1 1 0 1 1]
     86
 
-Then simulate the IBM repeatedly to get a sense of how variable the
-biological process is and obtain its distribution.
+### Simulate IBM repeatedly
+
+To investigate this stochastic process, we simulate the individual-based
+model repeatedly to get a sense of how variable the biological process
+is and obtain its distribution.
 
 ``` python
 U, I_state = rand_unif(1, seed=924505)
@@ -265,7 +267,7 @@ Now we can plot the theoretical PMF for the binomial distribution
 against the outcome of the individual-based simulations.
 
 ``` python
-X = np.arange(0, 45)
+X = np.arange(np.min(N_dead), np.max(N_dead)+1)
 pmf = stats.binom.pmf(X, N, p_d)
 plt.plot(X, pmf, marker='o', linestyle='none', fillstyle='none')
 plt.title("Binomial distribution (points) vs simulation (bars)")
