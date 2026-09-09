@@ -20,7 +20,7 @@ $$
 o(\Delta t) = a \Delta t^2 + b \Delta t^3 + \ ...
 $$
 
-The role of $o(\Delta t)$ is pretty neat. The idea is that we can use a **polynomial function** to represent the (potentially nonlinear) relationship between probability of death and interval duration to infinite accuracy. In Eq. 1 we are breaking out the linear term, $m \Delta t$, with $o(\Delta t)$ containing all the higher order polynomial terms. If $\Delta t > 0$, we can think of $m \Delta t$ as the **linear approximation**, or "first-order" approximation, and $o(\Delta t)$ as the error. In our simulation, we used only the linear approximation term.
+The role of $o(\Delta t)$, pronounced "oh delta tee", is pretty neat. The idea is that we can use a **polynomial function** to represent the (potentially nonlinear) relationship between probability of death and interval duration to infinite accuracy. In Eq. 1 we are breaking out the linear term, $m \Delta t$, with $o(\Delta t)$ containing all the higher order polynomial terms. We can think of $m \Delta t$ as the **linear approximation**, or "first-order" approximation, of the probability and $o(\Delta t)$ as the error. In our simulation, we used only the linear approximation term.
 
 As with many problems in probability, the **probability of an event not happening**, together with thinking somewhat backwards, is the key to progress. We often use the notation $q$ for the probability of an event not happening. The probability of no death in the interval, $Q(\Delta t)$, is one minus the probability of death
 
