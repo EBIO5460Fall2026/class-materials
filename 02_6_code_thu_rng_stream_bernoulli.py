@@ -82,9 +82,9 @@ print(event)
 # Vectorized
 
 p = 0.3
-reps = 10000
+sims = 10000
 
-U, I_state = rand_unif(reps, I_state)
+U, I_state = rand_unif(sims, I_state)
 
 # True if event occurs, False otherwise
 
@@ -101,7 +101,7 @@ print(count)
 # Theoretical E(X) = p
 print(p)
 # Observed
-print(count / reps)
+print(count / sims)
 # or
 print(np.mean(events))
 

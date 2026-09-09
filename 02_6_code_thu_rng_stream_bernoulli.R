@@ -84,9 +84,9 @@ print(event)
 # Vectorized
 
 p <- 0.3
-reps <- 10000
+sims <- 10000
 
-rng_out <- rand_unif(reps, rng_out$I_state)
+rng_out <- rand_unif(sims, rng_out$I_state)
 U <- rng_out$U
 
 # True if event occurs, False otherwise
@@ -104,7 +104,7 @@ print(count)
 # Theoretical E(X) = p
 print(p)
 # Observed
-print(count / reps)
+print(count / sims)
 # or
 print(mean(events))
 
