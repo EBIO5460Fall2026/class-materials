@@ -42,10 +42,10 @@ rng2 = np.random.default_rng(58773)
 
 m = 0.02
 delta_t = 1/365
-reps = 1000
-time_to_death = np.empty(reps)
+sims = 1000
+time_to_death = np.empty(sims)
 
-for i in range(reps):
+for i in range(sims):
     time_to_death[i] = death_continous_time(m, delta_t, rng2)
     if i % 100 == 0:
         print(i)
