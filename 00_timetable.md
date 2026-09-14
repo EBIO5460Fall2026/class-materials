@@ -8,11 +8,11 @@ Below are assignment due dates and a record of the topics we covered each week t
 
 | Assignment                       | Due             |
 | -------------------------------- | --------------- |
-| 1                        | Tue (Week 4) |
-| 2          | Thu (Week 5)  |
-| 3      | Thu (Week 7) |
-| 4                     | Thu (Week 9) |
-| 5              | Thu (Week 11) |
+| 1 Stochastic models              | Thu 24 Sep 3:30 (Week 6) |
+| 2      | Tue (Week 8)  |
+| 3      | Thu (Week 9)  |
+| 4      | Tue (Week 11) |
+| 5      | Thu (Week 12) |
 | Individual project presentations | Thu 10 Dec 4:30-7PM (finals week) |
 | Individual project code or paper | Sun 13 Dec (finals week) |
 
