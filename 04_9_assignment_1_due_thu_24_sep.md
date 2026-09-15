@@ -149,7 +149,7 @@ Rubric
 - [ ] Part B: Using text comments, simulated and theoretical mean, var, s.d. reported and compared for viable eggs laid
 
 
-## Q4: New distribution - gamma from Poisson process
+## Q4: New distribution - Erlang/gamma from Poisson process
 
 An individual needs to consume 5 prey items in a feeding bout to satisfy its physiological needs. Assuming the individual encounters prey at a rate of s = 0.1 per minute, how long does it take an individual to catch 5 prey items and complete a feeding bout? Modify the code in the `num_prey_found` model from `04_7_code_thu` so that the simulation stops when 5 prey items have been captured instead of stopping at a fixed time.
 
@@ -167,7 +167,7 @@ Reasoning about probability
 
 Tips and hints
 
-* Consult wikipedia for how a gamma distribution arises, explanation of its parameters, means, and variances, and assumptions
+* Consult wikipedia for how an Erlang distribution (special case of a gamma distribution) arises, explanation of its parameters, means, and variances, and assumptions
 * Use SciPy to calculate the theoretical PDF
 
 Rubric
