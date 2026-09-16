@@ -32,11 +32,10 @@ num_prey_found(s, t_max, rng)
 # Simulation study
 
 rng = np.random.default_rng(20598)
-
 sims = 100000
+t_max = 500       # stop simulation at this time
 
 s = 0.05          # search rate (ca probability per unit time)
-t_max = 500       # stop simulation at this time
 print(1/s)        # average time to find next prey item
 
 nprey = np.empty(sims)
@@ -60,16 +59,20 @@ plt.title("Poisson distribution (points) vs simulation (bars)")
 
 
 # Simulating multiple event types
-# Prey search and death
+# Prey search plus predator death
 
 rng = np.random.default_rng(1234)
 
-s = 365 / 3   # Catches prey every few days
-m = 1 / 15    # Expected lifetime 15 years
+# Biological process parameters
+s = 365 / 3   # catches prey every few days
+m = 1 / 15    # expected lifetime 15 years
 
+# System state
 alive = True
-t = 0
 prey = 0
+
+# Events over time
+t = 0
 while alive:
 
     # total rate (intensity)
@@ -107,12 +110,12 @@ def find_prey_then_die(s, m, rng):
     # overall event rate
     intensity = s + m
 
-    # Initial state
+    # initial state
     alive = True
     t = 0
     prey = 0
 
-    # Dynamics
+    # dynamics
     while alive:
 
         # waiting time until next event
@@ -146,14 +149,13 @@ find_prey_then_die(s, m, rng)
 # Simulation study
 
 rng = np.random.default_rng(20598)
-
 sims = 100000
 
-# Imagine a spider catching insects
-s = 1           # Search (catch) rate (per day)
-m = 1 / 14      # Death rate (days)
-print(1 / s)    # Expected time to find next prey item
-print(1 / m)    # Expected lifetime
+                # Imagine a spider catching insects
+s = 1           # search (catch) rate (per day)
+m = 1 / 14      # death rate (days)
+print(1 / s)    # expected time to find next prey item
+print(1 / m)    # expected lifetime
 
 nprey = np.empty(sims)
 age_at_death = np.empty(sims)
@@ -172,8 +174,9 @@ plt.ylabel("Probability mass")
 
 # Add theoretical PMF to plot
 X = np.arange(np.min(nprey), np.max(nprey)+1)
-# Scipy parameterization of is num trials to first success
-# we have number of failures *before* success, so add 1
+# Scipy parameterization of geometric distribution is X = num trials to first
+# success (death in our case). We have X = number of failures (prey) *before*
+# success (death), so add 1 to X.
 pmf = stats.geom.pmf(X + 1, m / (s + m))
 plt.plot(X, pmf, marker='o', linestyle='none', fillstyle='none')
 plt.title("Geometric distribution (points) vs simulation (bars)")
