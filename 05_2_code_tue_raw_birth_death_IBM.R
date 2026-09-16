@@ -36,7 +36,7 @@ while ( t < t_max & N_t > 0 ) {
     event_birth <- rbinom(1, size=1, prob=total_birth / intensity)
 
     # which individual does the event happen to?
-    i <- sample(which(alive == 1), size=1)
+    i <- sample(which(alive == 1), size=1)  #equal p, identical individuals
 
     # update system state (do event)
     if ( event_birth == 1 ) {

@@ -70,10 +70,10 @@ while t < t_max and N_t > 0:
     t = t + w
 
     # which event type occurs?
-    event_birth = rng.binomial(1, total_birth / intensity) #1 = birth
+    event_birth = rng.binomial(1, total_birth / intensity)    #1 = birth
 
     # which individual does the event happen to?
-    i = rng.choice(np.where(alive == 1)[0]) 
+    i = rng.choice(np.where(alive == 1)[0])  #equal p, identical individuals
 
     # update system state (do event)
     if event_birth:
