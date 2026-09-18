@@ -101,7 +101,7 @@ Maximum 300 words
 
 ## Q3: Continuous time stochastic events
 
-Part A: Modify the `death_continuous_time` model from `04_3_code_tue` to simulate an insect individual laying eggs
+Part A: Modify the `num_prey_found` model from `04_7_code_thu` to simulate an insect individual laying eggs
 
 * Egg-laying rate: b = 0.1 per hour
 
