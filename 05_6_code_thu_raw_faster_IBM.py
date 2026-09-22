@@ -31,7 +31,7 @@ def grow(x, fill, factor=2):
 # Simulation control
 rng = np.random.default_rng(95756)
 t = 0.0      #needs to be float, e.g 0.0
-t_max = 100
+t_max = 30
 
 
 # Initial biological state
@@ -47,6 +47,9 @@ N_t = np.sum(alive) #scale transition (sum over individuals -> population)
 N = np.array([N_t])     #track N
 times = np.array([t])   #track time
 
+#  --keep a list of which individuals are alive
+alive_list = np.arange(N_t)
+
 # --calculate initial event intensity
 total_birth = np.sum(b * alive)
 total_death = np.sum(m * alive)
@@ -59,14 +62,16 @@ b = grow(b, fill=0, factor=100)
 m = grow(m, fill=0, factor=100)
 isize = len(alive)
 
-N = grow(N, fill=-1, factor=1000)
-times = grow(times, fill=np.nan, factor=1000)
+N = grow(N, fill=-1, factor=200)
+times = grow(times, fill=np.nan, factor=200)
 psize = len(N)
+
+alive_list = grow(alive_list, fill=-1, factor=10)
 
 # Simulate events
 
 k = 0        #count number of events
-irow = N_0   #array row we insert the next individual info into
+irow = N_t   #array row we insert the next individual info into
 prow = 1     #array row we insert the next population info into
 chkpt_t = 1
 
@@ -84,6 +89,9 @@ while t < t_max and N_t > 0:
         times = grow(times, np.nan)
         psize = psize * 2
 
+    if len(alive_list) == N_t:
+        alive_list = grow(alive_list, -1)
+
     start_time = time() #timer
 
     # waiting time to next event
@@ -96,7 +104,9 @@ while t < t_max and N_t > 0:
     event_birth = rng.binomial(1, total_birth / intensity) #1 = birth
 
     # which individual does the event happen to?
-    i = rng.choice(np.where(alive)[0])  #equal p, identical individuals
+    # i = rng.choice(np.where(alive)[0])  #equal p, identical individuals
+    j = rng.integers(N_t)
+    i = alive_list[j]
 
     # update system state (do event)
     if event_birth:
@@ -104,6 +114,8 @@ while t < t_max and N_t > 0:
         alive[irow] = 1
         b[irow] = b[i]  #inherit from parent
         m[irow] = m[i]
+        # update alive list
+        alive_list[N_t] = irow
         # update intensities
         total_birth = total_birth + b[i]
         total_death = total_death + m[i]
@@ -114,6 +126,8 @@ while t < t_max and N_t > 0:
     else:
         # death
         alive[i] = 0
+        # update alive list (swap with last)
+        alive_list[j] = alive_list[N_t - 1]
         # update intensities
         total_birth = total_birth - b[i]
         total_death = total_death - m[i]
@@ -140,12 +154,12 @@ while t < t_max and N_t > 0:
 
 
 # Trim arrays (remove the unused elements)
-irow = irow - 1
 alive = alive[:irow]
 b = b[:irow]
 m = m[:irow]
 
-prow = prow - 1
+if t > t_max:
+    prow = prow - 1
 N = N[:prow]
 times = times[:prow]
 
