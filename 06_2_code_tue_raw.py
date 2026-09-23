@@ -129,9 +129,10 @@ def birth_death_ibm(alive, b, m, t_max, rng):
         prow += 1
 
     # Trim arrays (remove the unused elements)
-    alive = alive[:irow]
-    b = b[:irow]
-    m = m[:irow]
+    # We don't need these for now but might later
+    # alive = alive[:irow]
+    # b = b[:irow]
+    # m = m[:irow]
 
     if t > t_max:
         prow = prow - 1
@@ -160,7 +161,7 @@ plt.title("Birth-death IBM")
 
 
 # Timing study
-# e.g. distribution of N at time 30
+# e.g. N_0 = 4000
 
 rng = np.random.default_rng(95756)
 sims = 10
@@ -176,7 +177,6 @@ for i in range(sims):
     #print(i)
 end_time = time() #stop timer
 print(end_time - start_time)
-
 
 
 # Simulation study 1
@@ -203,7 +203,6 @@ for i in range(sims):
     if i % 1000 == 0:
         print(i)
 
-
 # Distribution (PMF) of N at t = 30
 plt.figure()
 bins = np.arange(np.min(N)-0.5, np.max(N)+0.5+1)
@@ -222,7 +221,7 @@ print(f"MCSE: {mcse}")
 # Approx 95% CI
 print(f"95% CI {mean_N - 2 * mcse:.2f}, {mean_N + 2 * mcse:.2f}")
 
-# Expected N is deterministic exponential growth:
+# Expected N is deterministic exponential growth
 # E[N] = N(0)e^{(b-m)t}
 print(f"Expected: {N_0 * np.exp(0.05 * t_max)}")
 
@@ -239,9 +238,8 @@ print(f"95% CI {p_extinct - 2 * mcse:.4f}, {p_extinct + 2 * mcse:.4f}")
 
 
 
-
 # Simulation study 2
-# Mean and variance of the ensemble over time
+# Mean and standard error of the ensemble over time
 
 # Simulation control
 rng = np.random.default_rng(9956)
@@ -267,16 +265,21 @@ for i in range(sims):
 
 
 # Compile results onto a grid of times.
+#
+# Here is a straightforward algorithm. This will scan every event in every
+# realization, so compute time is similar to the actual simulation. To speed
+# this up, we would vectorize it.
+#
 # Algorithm:
+# set a grid of times with regular spacing
 # for each realization
 #     for each time on the grid
 #         find the first event time after the grid time
-#         move back one event (unless it's the final event)
+#         move back one event, unless it's the final event
 #         record N
 
-
-# Rows = realizations
-# Columns = grid times
+# rows = realizations, columns = grid times
+t_grid = np.linspace(0, 100)
 N = np.empty((sims, len(t_grid)), dtype=int)
 
 for r in range(sims):
@@ -295,7 +298,12 @@ for r in range(sims):
         if j != (len(t) - 1):
             j = j - 1
         N[r, k] = N_series[j]
+    
+    if r % 100 == 0:
+        print(r)
 
+
+# Means and mcse across realizations
 
 N_mean = np.mean(N, axis=0)
 se = np.std(N, axis=0, ddof=1) / np.sqrt(sims)
@@ -304,20 +312,20 @@ se = np.std(N, axis=0, ddof=1) / np.sqrt(sims)
 # Now we can plot realizations and the mean with 95% CI
 
 plt.figure()
-
-for r in range(25):
-    plt.plot(t_grid, N[r, :], lw=0.75, alpha=0.5)
+# first 25 realizations (from original results list, not regular grid)
+for i in range(25):
+    N_step, t = result[i]
+    plt.step(t, N_step, where='post', lw=0.75, alpha=0.5)
 
 plt.ylim(bottom=0)
 plt.xlabel("Time")
 plt.ylabel("N")
 plt.title("Birth-death IBM")
-
+# add mean with CI bands
 plt.plot(t_grid, N_mean, color='C0')
-
 plt.fill_between(t_grid, N_mean - 2 * se, N_mean + 2 * se, alpha=0.3, color='C0')
 
 # Compare to deterministic model of exponential growth
-# We see that the det model emerges as the mean of the stochastic process
-N_det = N_0 * np.exp(0.05 * t_grid)
+# The deterministic model emerges as the mean of the stochastic process
+N_det = N_0 * np.exp(0.05 * t_grid) #b - m = 0.05
 plt.plot(t_grid, N_mean, color='red', linestyle='--')
