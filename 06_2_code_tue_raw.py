@@ -286,18 +286,18 @@ for r in range(sims):
 
     N_series, t = result[r]
 
-    for k in range(len(t_grid)):
+    for c in range(len(t_grid)):
 
         # Find first event time after the grid time
         # unless it's the last time in the series
         j = 0
-        while t[j] <= t_grid[k] and j < (len(t) - 1):
+        while t[j] <= t_grid[c] and j < (len(t) - 1):
             j += 1
 
         # Record N from the final or previous event
         if j != (len(t) - 1):
             j = j - 1
-        N[r, k] = N_series[j]
+        N[r, c] = N_series[j]
     
     if r % 100 == 0:
         print(r)
@@ -322,10 +322,11 @@ plt.xlabel("Time")
 plt.ylabel("N")
 plt.title("Birth-death IBM")
 # add mean with CI bands
-plt.plot(t_grid, N_mean, color='C0')
-plt.fill_between(t_grid, N_mean - 2 * se, N_mean + 2 * se, alpha=0.3, color='C0')
+plt.plot(t_grid, N_mean, color='C0', label='ensemble mean')
+plt.fill_between(t_grid, N_mean - 2 * se, N_mean + 2 * se, alpha=0.3, color='C0', label='95% CI')
 
 # Compare to deterministic model of exponential growth
 # The deterministic model emerges as the mean of the stochastic process
 N_det = N_0 * np.exp(0.05 * t_grid) #b - m = 0.05
-plt.plot(t_grid, N_mean, color='red', linestyle='--')
+plt.plot(t_grid, N_det, color='red', linestyle='--', label='deterministic model')
+plt.legend()
