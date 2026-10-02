@@ -43,8 +43,7 @@ Examples from ecology and evolution are used throughout
     * Modeling workflows
 * Agent- and individual-based simulation
     * Discrete events
-    * Procedural programming
-    * Object oriented programming and Python classes
+    * Efficient computation
     * Using high performance computing (HPC) resources
 * Fundamental algorithms for biological processes
     * Stochastic state-changes: birth, death, movement, consumption, growth, infection, mutation, recombination, branching
