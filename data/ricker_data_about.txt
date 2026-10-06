@@ -1,0 +1,9 @@
+Data are from March 2007.
+They are the data for standard medium from the FQ3 (flour quality 3) experiment.
+Patches of different initial abundance were set up in random order within 3 batches.
+
+batch: batch identifier. 
+At: number of adult beetles at the start of the generation
+Atp1: number of adult beetles emerged at the end of the generation
+
+If the number of beetles was much larger than about 50-75, 50 beetles were counted out and weighed and the total number estimated by weight. Error in this procedure is generally <1%.
