@@ -1,26 +1,3 @@
-#----Negative binomial-binomial (demographic) pmf for Ricker model
-#
-# Translate to C? Can't avoid the loop, and this algorithm involves lots of
-# memory allocation operations in R.
-#
-Ricker_dnbinombinom_d <- function(Ntp1,Nt,p,R,alpha,k,log=FALSE){
-  sump <- rep(NA,length(Ntp1)) #Sum of the probabilities
-  for (i in 1:length(Ntp1)){
-    f <- 0:Nt[i] #f is number of females
-    sump[i] <- sum( exp( dbinom(f,Nt[i],p,log=TRUE) +
-        dnbinom(Ntp1[i],size=k*f+(f==0),
-                mu=(1/p)*R*f*exp(-alpha*Nt[i]),log=TRUE) ) )
-    #We use the log scale to ensure small probs multiply accurately
-    #Add 1 to size parameter of NB when females=0 to avoid NaN's.
-  }
-  if (log==FALSE) {
-    return( sump )
-  } #else
-  return( log(sump) )
-}
-
-
-
 # ---Negative binomial-binomial-gamma pmf for Ricker model
 #
 # Requires a standard number of increments and has no automatic resolution
@@ -61,4 +38,40 @@ Ricker_dnbinombinomgamma <- function(Ntp1,Nt,p,R,alpha,kD,kE,log=FALSE,ptol=1e-3
     return( pint )
   } # else
   return( log(pint) )
+}
+
+#----Negative binomial-binomial (demographic) pmf for Ricker model
+#
+# Translate to C? Can't avoid the loop, and this algorithm involves lots of
+# memory allocation operations in R.
+#
+Ricker_dnbinombinom_d <- function(Ntp1,Nt,p,R,alpha,k,log=FALSE){
+  sump <- rep(NA,length(Ntp1)) #Sum of the probabilities
+  for (i in 1:length(Ntp1)){
+    f <- 0:Nt[i] #f is number of females
+    sump[i] <- sum( exp( dbinom(f,Nt[i],p,log=TRUE) +
+        dnbinom(Ntp1[i],size=k*f+(f==0),
+                mu=(1/p)*R*f*exp(-alpha*Nt[i]),log=TRUE) ) )
+    #We use the log scale to ensure small probs multiply accurately
+    #Add 1 to size parameter of NB when females=0 to avoid NaN's.
+  }
+  if (log==FALSE) {
+    return( sump )
+  } #else
+  return( log(sump) )
+}
+
+#----Variance of the NB-binomial-gamma
+#
+Ricker_nbinombinomgamma.var <- function(Nt,R,alpha,kD,kE) {
+  poisvar <- Ricker(Nt,R,alpha)             #Poisson variance
+  sexvar <- Ricker(Nt,R,alpha)^2 / Nt       #sex variance
+  dhvar <- Ricker(Nt,R,alpha)^2 / (kD*Nt)   #raw dhvar for no-sex model
+  evar <- Ricker(Nt,R,alpha)^2 / kE         #env variance
+  return( poisvar + sexvar + 2*dhvar + evar )
+}
+
+Ricker <- function(Nt, R, alpha) {
+    mu = Nt * R * exp(-1 * alpha * Nt)
+    return(mu)
 }
