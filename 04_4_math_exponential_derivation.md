@@ -61,7 +61,7 @@ $$
 \displaystyle \frac{dQ(t)}{dt} = -m Q(t).
 $$
 
-If we then solve this differential equation (by integrating over $t$) to find $Q(t)$, we get
+This differential equation describes, in continuous time, how the probability of not having died by time $t$ (from time 0) changes. If we then solve this differential equation (by integrating over $t$) to find $Q(t)$, we get
 
 $$
 Q(t) = Q(0)e^{-mt}.
@@ -73,9 +73,9 @@ $$
 Q(t) = e^{-mt}. \ \ \ \ \ \ \ \ \ \ \ \ \text{(Eq. 5)}
 $$
 
-This is an exponential equation, so we're starting to see a hint of why the distribution is exponential.
+This equation directly tells us the probability of not having died by time $t$ (from time 0). This is an exponential equation, so we're starting to see a hint of why the distribution is exponential.
 
-But we're not done yet, we must keep thinking backwards! The probability of no death up until time $t$ is the same as the probability that the time of death, $T_\text{death}$, is greater than $t$, that is
+But we're not done yet, we must keep thinking backwards! The probability of not having died by time $t$ is the same as the probability that the time of death, $T_\text{death}$, is greater than $t$, that is
 
 $$
 Q(t) = \text{Pr}(T_\text{death} > t).
