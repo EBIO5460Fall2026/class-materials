@@ -33,6 +33,10 @@ def grow(x, fill, factor=2):
     return x_new
 
 
+# Make the death rate density dependent, so that
+# m_j = m + cN
+# c: increase in death rate caused by each individual
+#
 def birth_death_ibm_dd(alive, b, m, c, t_max, rng):
 
     # Initial biological state
