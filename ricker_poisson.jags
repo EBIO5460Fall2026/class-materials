@@ -1,0 +1,17 @@
+model {
+
+    # Priors (lognormal)
+    lnR ~ dnorm(log(1), 0.25)           #precision 1/var
+    lnalpha ~ dnorm(log(0.001), 0.25)
+
+    # Transformed parameters
+    R <- exp(lnR)
+    alpha <- exp(lnalpha)
+
+    # Likelihood
+    for ( i in 1:n ) {
+        mu[i] <- Nt[i] * R * exp(-alpha * Nt[i])
+        Ntp1[i] ~ dpois(mu[i])
+    }
+
+}

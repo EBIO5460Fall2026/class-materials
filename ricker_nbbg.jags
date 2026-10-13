@@ -1,0 +1,46 @@
+model {
+
+    # Priors (lognormal)
+    lnR ~ dnorm(log(1), 0.25)
+    lnalpha ~ dnorm(log(0.001), 0.25)
+    lnkD ~ dnorm(log(1), 0.25)
+    lnkE ~ dnorm(log(1), 0.25)
+
+    # Transformed parameters
+    R <- exp(lnR)
+    alpha <- exp(lnalpha)
+    kD <- exp(lnkD)
+    kE <- exp(lnkE)
+
+    # Fixed parameter
+    p_fem = 0.5
+
+    # Likelihood
+    for ( i in 1:n ) {
+
+        # Mirrors the model code for DGP
+        # but parameterization is different for distributions
+
+        # Environmental stochasticity
+        Rtx[i] ~ dgamma(kE, kE / R)
+
+        # Heterogeneity in sex
+        females[i] ~ dbin(p_fem, Nt[i])
+
+        # Negative binomial births + density independent mortality
+#        r_nb[i] <- kD * females[i] + equals(females[i], 0)
+#        mu_nb[i] <- (1/p_fem) * females[i] * Rtx[i]
+#        q_nb[i] <- r_nb[i] / (r_nb[i] + mu_nb[i])
+#        births[i] ~ dnegbin(q_nb[i], r_nb[i])
+
+        r_nb[i] <- kD * females[i] + 1e-6
+        mu_nb[i] <- (1 / p_fem) * females[i] * Rtx[i] + 1e-6
+
+        lambda[i] ~ dgamma(r_nb[i], r_nb[i] / mu_nb[i])
+        births[i] ~ dpois(lambda[i])
+
+        # Density dependent survival
+        survprob[i] <- exp(-alpha * Nt[i])
+        Ntp1[i] ~ dbin(survprob[i], births[i])
+    }
+}
