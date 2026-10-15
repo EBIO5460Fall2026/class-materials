@@ -1,14 +1,17 @@
 model {
 
     # Priors (lognormal)
-    lnR ~ dnorm(log(1), 0.25)
-    lnalpha ~ dnorm(log(0.001), 0.25)
+ #   lnR ~ dnorm(log(1), 0.1)
+ #   lnalpha ~ dnorm(log(0.001), 0.1)
+
+    R ~ dunif(0,25) #trying more informative distributions: says no large values
+    alpha ~ dunif(0,0.01)
     lnkD ~ dnorm(log(1), 0.25)
     lnkE ~ dnorm(log(1), 0.25)
 
     # Transformed parameters
-    R <- exp(lnR)
-    alpha <- exp(lnalpha)
+#    R <- exp(lnR)
+#    alpha <- exp(lnalpha)
     kD <- exp(lnkD)
     kE <- exp(lnkE)
 
@@ -26,6 +29,7 @@ model {
 
         # Heterogeneity in sex
         females[i] ~ dbin(p_fem, Nt[i])
+        has_fem[i] <- step(females[i] - 0.5) #indicator variable, 0 or 1
 
         # Negative binomial births + density independent mortality
 #        r_nb[i] <- kD * females[i] + equals(females[i], 0)
@@ -33,11 +37,26 @@ model {
 #        q_nb[i] <- r_nb[i] / (r_nb[i] + mu_nb[i])
 #        births[i] ~ dnegbin(q_nb[i], r_nb[i])
 
-        r_nb[i] <- kD * females[i] + 1e-6
-        mu_nb[i] <- (1 / p_fem) * females[i] * Rtx[i] + 1e-6
+#        r_nb[i] <- kD * females[i] + 1e-6
+#        mu_nb[i] <- (1 / p_fem) * females[i] * Rtx[i] + 1e-6
+#        lambda[i] ~ dgamma(r_nb[i], r_nb[i] / mu_nb[i])
+#        births[i] ~ dpois(lambda[i])
 
-        lambda[i] ~ dgamma(r_nb[i], r_nb[i] / mu_nb[i])
-        births[i] ~ dpois(lambda[i])
+        r_nb[i] <- kD * females[i]
+        mu_nb[i] <- (1 / p_fem) * females[i] * Rtx[i]
+
+        # Gamma-Poisson only when females > 0
+
+        lambda_birth[i] ~ dgamma(
+            r_nb[i] * has_fem[i] + (1 - has_fem[i]),
+            (r_nb[i] * has_fem[i] + (1 - has_fem[i])) /
+            (mu_nb[i] * has_fem[i] + (1 - has_fem[i]))
+        )
+
+        births_mean[i] <- has_fem[i] * lambda_birth[i]
+
+        births[i] ~ dpois(births_mean[i])
+
 
         # Density dependent survival
         survprob[i] <- exp(-alpha * Nt[i])
