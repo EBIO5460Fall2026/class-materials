@@ -7,7 +7,6 @@ tribdata <- read.csv("data/ricker_data.csv")
 Nt <- round(tribdata$At)
 Ntp1 <- round(tribdata$Atp1)
 
-
 n = length(Nt)
 data <- list(
     Nt = Nt,

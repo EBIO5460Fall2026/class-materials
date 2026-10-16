@@ -1,17 +1,16 @@
 model {
 
     # Priors (lognormal)
- #   lnR ~ dnorm(log(1), 0.1)
- #   lnalpha ~ dnorm(log(0.001), 0.1)
-
+    # lnR ~ dnorm(log(1), 0.1)
+    # lnalpha ~ dnorm(log(0.001), 0.1)
     R ~ dunif(0,25) #trying more informative distributions: says no large values
     alpha ~ dunif(0,0.01)
     lnkD ~ dnorm(log(1), 0.25)
     lnkE ~ dnorm(log(1), 0.25)
 
     # Transformed parameters
-#    R <- exp(lnR)
-#    alpha <- exp(lnalpha)
+    # R <- exp(lnR)
+    # alpha <- exp(lnalpha)
     kD <- exp(lnkD)
     kE <- exp(lnkE)
 
@@ -24,12 +23,12 @@ model {
         # Mirrors the model code for DGP
         # but parameterization is different for distributions
 
-        # Environmental stochasticity
-        Rtx[i] ~ dgamma(kE, kE / R)
-
         # Heterogeneity in sex
         females[i] ~ dbin(p_fem, Nt[i])
         has_fem[i] <- step(females[i] - 0.5) #indicator variable, 0 or 1
+
+        # Environmental stochasticity
+        Rtx[i] ~ dgamma(kE, kE / R)
 
         # Negative binomial births + density independent mortality
 #        r_nb[i] <- kD * females[i] + equals(females[i], 0)
