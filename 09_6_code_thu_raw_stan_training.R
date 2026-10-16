@@ -47,7 +47,6 @@ mcmc_trace(samples_array, pars = "alpha")
 
 summarise_draws(samples_array, mean, sd, rhat, ess_bulk, ess_tail, mcse_mean)
 
-
 samples <- as_draws_df(samples_array)
 
 
