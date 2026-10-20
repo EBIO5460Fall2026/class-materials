@@ -5,6 +5,7 @@
 source("source/Ricker_dnbinombinomgamma.R")
 library(stats4) #mle
 
+# Read in the data
 tribdata <- read.csv("data/ricker_data.csv")
 tribdata$Nt <- round(tribdata$At)
 tribdata$Ntp1 <- round(tribdata$Atp1)
