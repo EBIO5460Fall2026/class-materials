@@ -1,16 +1,16 @@
 model {
 
     # Priors (lognormal)
-    # lnR ~ dnorm(log(1), 0.1)
-    # lnalpha ~ dnorm(log(0.001), 0.1)
-    R ~ dunif(0,25) #trying more informative distributions: says no large values
-    alpha ~ dunif(0,0.01)
-    lnkD ~ dnorm(log(1), 0.25)
-    lnkE ~ dnorm(log(1), 0.25)
+    lnR ~ dnorm(log(1), 2/3)  #mean and precision (1/var)
+    lnalpha ~ dnorm(log(0.001), 0.5)
+    # R ~ dunif(0,25) #trying more informative distributions: says no large values
+    # alpha ~ dunif(0,0.01)
+    lnkD ~ dnorm(log(10), 0.5)
+    lnkE ~ dnorm(log(10), 0.5)
 
     # Transformed parameters
-    # R <- exp(lnR)
-    # alpha <- exp(lnalpha)
+    R <- exp(lnR)
+    alpha <- exp(lnalpha)
     kD <- exp(lnkD)
     kE <- exp(lnkE)
 
@@ -42,20 +42,16 @@ model {
 #        births[i] ~ dpois(lambda[i])
 
         r_nb[i] <- kD * females[i]
-        mu_nb[i] <- (1 / p_fem) * females[i] * Rtx[i]
+        mu_nb[i] <- (Rtx[i] / p_fem) * females[i]
 
         # Gamma-Poisson only when females > 0
 
-        lambda_birth[i] ~ dgamma(
-            r_nb[i] * has_fem[i] + (1 - has_fem[i]),
-            (r_nb[i] * has_fem[i] + (1 - has_fem[i])) /
+        lambda_birth[i] ~ dgamma( r_nb[i] * has_fem[i] + (1 - has_fem[i]),
+            (r_nb[i] * has_fem[i] + (1 - has_fem[i])) / 
             (mu_nb[i] * has_fem[i] + (1 - has_fem[i]))
         )
-
         births_mean[i] <- has_fem[i] * lambda_birth[i]
-
         births[i] ~ dpois(births_mean[i])
-
 
         # Density dependent survival
         survprob[i] <- exp(-alpha * Nt[i])

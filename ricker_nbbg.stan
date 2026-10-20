@@ -22,17 +22,19 @@ transformed parameters {
 
 model {
 
-    lnR     ~ normal(log(1), 2);
-    lnalpha ~ normal(log(0.001), 2);
-    lnkD    ~ normal(log(1), 2);
-    lnkE    ~ normal(log(1), 2);
+    lnR     ~ normal(log(1), 1.2);
+    lnalpha ~ normal(log(0.001), 1.5);
+    lnkD    ~ normal(log(10), 1.5);
+    lnkE    ~ normal(log(10), 1.5);
+
+    real p_fem = 0.5;
 
     for (i in 1:n) {
 
         Rtx[i] ~ gamma(kE, kE / R);
 
-        # log probability for a single observation
-        vector[Nt[i] + 1] lp;
+        // log probability for each possible value of f
+        vector[Nt[i] + 1] lp_f;
 
         real s = exp(-alpha * Nt[i]);
 
@@ -40,26 +42,28 @@ model {
 
             if (f == 0) {
 
-                # vector indexing starts at 1, so index = f + 1
-                lp[f+1] = binomial_lpmf(0 | Nt[i], 0.5);
-
+                // handle f = 0 explicitly
+                // vector indexing starts at 1, so index = f + 1
                 if (Ntp1[i] == 0)
-                    # p = 1; (ln(p) = 0)
-                    lp[f+1] += 0;
+                    // p = dbinom(0, 0.5)
+                    lp_f[f+1] = binomial_lpmf(0 | Nt[i], p_fem);
                 else
-                    # p = 0; (ln(p) = -Inf)
-                    lp[f+1] += negative_infinity();
+                    // p = 0; (ln(p) = -Inf)
+                    lp_f[f+1] = negative_infinity();
 
             } else {
 
-                real r = kD * f;
-                real mu = (f / 0.5) * Rtx[i] * s;
-                lp[f+1] =
-                    binomial_lpmf(f | Nt[i], 0.5) +
-                    neg_binomial_2_lpmf(Ntp1[i] | r, mu);
+                real phi = kD * f;    //dispersion depends on f
+                real mu = (Rtx[i] / p_fem) * f * s;
+                lp_f[f+1] =
+                    binomial_lpmf(f | Nt[i], p_fem) +
+                    neg_binomial_2_lpmf(Ntp1[i] | mu, phi);
             }
         }
 
-        target += log_sum_exp(lp);  #log posterior (Stan keyword)
+        // The total probability across f values is the sum of the probabilities
+        // (i.e events f = 0 OR f = 1 OR f = 2 ...). This function sums the
+        // probabilities (p_f = exp(lp_f)) then takes the log of the sum.
+        target += log_sum_exp(lp_f);  //log posterior (Stan keyword)
     }
 }
