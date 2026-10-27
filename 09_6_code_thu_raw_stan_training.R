@@ -298,3 +298,5 @@ looic <- -2 * elpd_loo
 se_elpd <- sqrt(length(lpd_i) * var(lpd_i))
 se_looic <- 2 * se_elpd
 
+# We can now use this to compare models (see refresher topics)
+print(paste("LOOIC: ", looic, "+/- se:", se_looic))
