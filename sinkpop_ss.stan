@@ -26,10 +26,14 @@ model {
     lnN1 ~ normal(log(D[1]), 0.3);
     imm ~ normal(0, 100);
     s ~ beta(2, 2); //middle values
-    // s ~ beta(8, 2); //mean 0.8
+    //s ~ beta(8, 2); //mean 0.8
     //s ~ beta(1, 1); //no preference (uniform?)
     sigma_proc ~ normal(0, 0.1);
-    sigma_obs ~ normal(0, 0.1);
+    sigma_obs ~ normal(0, 0.1); //high mass at zero causes problems
+    //Try this instead, quite informative and works better:
+    // sigma_proc ~ normal(0.2, 0.05); 
+    // sigma_obs ~ normal(0.2, 0.05);
+    //Even better perhaps would be a gamma with zero mass at sd=0
 
     // Likelihood
     z ~ normal(0, 1);

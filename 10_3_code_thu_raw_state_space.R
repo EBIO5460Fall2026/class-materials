@@ -1,3 +1,6 @@
+# A simple model with both process and observation uncertainty
+# sink population with lognormal stochasticity
+
 set.seed(8562)
 
 # True parameters
@@ -8,8 +11,8 @@ sigma_obs  <- 0.1  #ln scale
 
 T <- 50
 
-N <- rep(NA, T)
-D <- rep(NA, T)
+N <- rep(NA, T)  #truth
+D <- rep(NA, T)  #data
 
 # Initial abundance
 N[1] <- 20
@@ -32,15 +35,13 @@ legend("bottomright", c("True state","Observed"),
     lty=c(1,NA), pch=c(NA,16), col=c("black","red"))
 
 
+
+# ------------------------------------------------------------------------------------------------
 # Bayesian training and inference with Stan
 
 library(cmdstanr)
 library(bayesplot)
 library(posterior)
-
-mod_obs  <- cmdstan_model("sinkpop_obs.stan")
-mod_proc <- cmdstan_model("sinkpop_proc.stan")
-mod_ss   <- cmdstan_model("sinkpop_ss.stan")
 
 stan_data <- list(
     T = length(D),
@@ -48,6 +49,9 @@ stan_data <- list(
 )
 
 # Observation uncertainty model
+# This is the wrong model
+
+mod_obs  <- cmdstan_model("sinkpop_obs.stan")
 
 init_fun <- function() {
   list(
@@ -82,6 +86,9 @@ legend("topleft", c("True state","Observed","Estimated state"),
     lty=c(1, NA, 2), pch=c(NA, 16, NA), col=c("black", "red", "blue"))
 
 # Process uncertainty model
+# This is also the wrong model
+
+mod_proc <- cmdstan_model("sinkpop_proc.stan")
 
 init_fun <- function() {
   list(
@@ -115,7 +122,15 @@ segments(1:(T-1), D[1:(T-1)], 2:T, N_hat_proc, col="blue", lty=2)
 legend("topleft", c("True state","Observed","Estimated state"),
     lty=c(1, NA, 2), pch=c(NA, 16, NA), col=c("black", "red", "blue"))
 
+
 # State space model (process + observation uncertainty)
+# This is the right model
+
+# While the model is simple, sampling the posterior is not straightforward and
+# it helps to tweak the priors and HMC algorithm.
+# See stan model code for suggested improved priors and mod_ss$sample() below
+
+mod_ss   <- cmdstan_model("sinkpop_ss.stan")
 
 init_fun <- function() {
   list(
@@ -134,10 +149,10 @@ fit_ss <- mod_ss$sample(
     init = init_fun,
     chains = 4,
     parallel_chains = 4,
-    iter_warmup = 2000,
-    iter_sampling = 2000,
-    adapt_delta = 0.99,
-    max_treedepth = 15
+    iter_warmup = 1000,    # Try 4000 warmup, 4000 sampling
+    iter_sampling = 1000
+    #adapt_delta = 0.99,   # Add these two lines for further improvement
+    #max_treedepth = 15
 )
 
 fit_ss$summary(
@@ -147,6 +162,7 @@ fit_ss$summary(
 summarize_draws(fit_ss$draws(), "mean", "sd", "rhat", "ess_bulk", "ess_tail") |>
     print(n=120)
 
+# Fitted model with estimated states
 samples_lnN_ss <- as_draws_matrix(fit_ss$draws("lnN"))
 N_hat_ss <- exp(colMeans(samples_lnN_ss))     #estimated states
 
@@ -157,7 +173,7 @@ lines(1:T, N_hat_ss, col="blue", lty=2)
 legend("topleft", c("True state","Observed","Estimated state"),
     lty=c(1, NA, 2), pch=c(NA, 16, NA), col=c("black", "red", "blue"))
 
-
+# Chain behavior
 samples_array <- fit_ss$draws(variables=c("imm", "s", "sigma_proc", "sigma_obs"))
 
 mcmc_trace(samples_array, pars = "imm")
@@ -173,7 +189,9 @@ mcmc_trace(samples_array, "sigma_obs", window=c(0,500))
 # Posterior distributions
 samples <- as_draws_df(samples_array)
 mcmc_hist(samples, pars=c("imm","s","sigma_proc","sigma_obs"))
-mcmc_pairs(samples, pars=c("imm","s","sigma_proc","sigma_obs"))
+np <- nuts_params(fit_ss)
+mcmc_pairs(samples, pars=c("imm","s","sigma_proc","sigma_obs"), np=np)
+
 
 # Uncertainty intervals for state N
 
