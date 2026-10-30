@@ -1,5 +1,5 @@
 # Approximate Bayesian Computation
-# Demonstrate the basic algorithm
+# Demonstrate the basic rejection ABC algorithm
 # Train the logistic IBM
 
 import numpy as np
@@ -113,122 +113,7 @@ def birth_death_ibm_dd(alive, b, m, c, t_max, rng):
 
         intensity = b_intensity + m_intensity
 
-        # insert population
-
-# Simulation study
-# Mean and variance of the ensemble over time and extinction
-# Investigation: change parameters and initial state
-
-# Simulation control
-rng = np.random.default_rng(29732)
-sims = 1000
-t_max = 200
-
-# Parameters and initial state
-N_0 = 25
-alive = np.full(N_0, True)  # alive state
-b = np.full(N_0, 0.25)      # birth rate
-m = np.full(N_0, 0.2)       # death rate
-c = 0.001                  # per capita competition effect on mortality
-
-# Storage for result
-result = []
-
-# Realizations
-for i in range(sims):
-    N_series, t = birth_death_ibm_dd(alive, b, m, c, t_max, rng)
-    result.append((N_series, t))
-    if i % 100 == 0:
-        print(i)
-
-# Compile results onto a grid of times
-# rows = realizations, columns = grid times
-t_grid = np.linspace(0, 200)
-
-
-# Mean, standard deviation of realizations, standard error of mean
-N_mean = np.mean(N, axis=0)
-sd = np.std(N, axis=0, ddof=1)
-se = sd / np.sqrt(sims)
-
-# Mean, standard deviation of realizations, standard error of mean
-# conditioned on being extant
-N_extant = N[np.min(N, axis=1) != 0]
-N_mean_extant = np.mean(N_extant, axis=0)
-sd_extant = np.std(N_extant, axis=0, ddof=1)
-se_extant = sd_extant / np.sqrt(len(N_extant))
-
-# Number extinct
-extinct = sum(np.min(N, axis=1) == 0)
-print(f"Number extinct: {extinct}")
-print(f"Proportion extinct: {extinct / sims}")
-
-
-# Plot means and standard errors
-plt.figure()
-plt.fill_between(t_grid, N_mean - 2 * se, N_mean + 2 * se, alpha=0.3,
-    color='red', label='s.e.')
-plt.fill_between(t_grid, N_mean_extant - 2 * se_extant,
-    N_mean_extant + 2 * se_extant, alpha=0.3, color='C0', label='s.e. extant')
-# first 25 realizations (from original results list, not regular grid)
-for i in range(10):
-    N_step, t = result[i]
-    plt.step(t, N_step, where='post', lw=0.75, alpha=0.5)
-plt.plot(t_grid, N_mean, color='red', label='mean')
-plt.plot(t_grid, N_mean_extant, color='C0', label='mean extant')
-plt.legend()
-plt.ylim(bottom=0)
-#plt.ylim(top=7000)
-plt.xlabel("Time")
-plt.ylabel("N")
-plt.title(f"Birth-death IBM: N_0={N_0} b={b[0]} m={m[0]} c={c}")
-
-
-# Compare to deterministic model of logistic growth
-# The deterministic model emerges as the mean of the stochastic process
-K = (b[0] - m[0]) / c
-N_det = N_0 * K / (N_0 + (K - N_0) * np.exp(-1 * (b[0] - m[0]) * t_grid))
-plt.plot(t_grid, N_det, color='black', linestyle='--', label='deterministic')
-plt.legend()
-
-# Expected equilibrium
-E_N = K - np.mean(sd_extant[25:49]**2) / K
-plt.plot(np.arange(101,201), np.full(100, E_N), color='purple',
-    linestyle='--', label='expected')
-plt.legend()
-
-
-# Plot mean and standard deviation (process variability)
-plt.figure()
-plt.fill_between(t_grid, N_mean - sd, N_mean + sd, alpha=0.3, color='C0',
-    label='standard deviation')
-for i in range(25):
-    #plt.plot(t_grid, N[i, :], lw=0.75, alpha=0.5) #alt: grid times
-    N_step, t = result[i]
-    plt.step(t, N_step, where='post', lw=0.75, alpha=0.3)
-plt.plot(t_grid, N_mean, color='C0', label='mean')
-plt.legend()
-plt.ylim(bottom=0)
-plt.ylim(top=100)
-plt.xlabel("Time")
-plt.ylabel("N")
-plt.title(f"Birth-death IBM: N_0={N_0} b={b[0]} m={m[0]} c={c}")
-
-
-# Plot extinct populations
-plt.figure()
-for i in np.where(np.min(N, axis=1) == 0 )[0]:
-    N_step, t = result[i]
-    plt.step(t, N_step, where='post', lw=0.75, alpha=0.5)
-plt.plot(t_grid, N_mean, color='C0', label='mean')
-plt.legend()
-plt.ylim(bottom=0)
-plt.ylim(top=100)
-plt.xlim(right=t_max)
-plt.xlabel("Time")
-plt.ylabel("N")
-plt.title(f"Birth-death IBM: N_0={N_0} b={b[0]} m={m[0]} c={c}")
- level states in arrays
+        # insert population level states in arrays
         N[prow] = N_t
         times[prow] = t
         # increment row index for next time
@@ -247,8 +132,8 @@ plt.title(f"Birth-death IBM: N_0={N_0} b={b[0]} m={m[0]} c={c}")
 
     return N, times
 
-
-# Helper function to put a single realization on a regular grid
+# Helper function to put simulation data on a regular (even spaced) time grid
+# Processes a single realization from the IBM
 #
 def regularize_series(N_series, times, t_grid):
     N_grid = np.empty(len(t_grid), dtype=int)
@@ -262,22 +147,117 @@ def regularize_series(N_series, times, t_grid):
     return N_grid
 
 
-# ------------------------------------------------------------------------------
-# Simulated data set
+# Simulate a single data set
+# This will be the data we wish to analyze.
+# Our goal will be to construct the posterior distribution for the parameter c.
+# For simplicity we'll assume N_0, b, m are known, while only c is unknown, but
+# the general algorithm here extends easily to multiple unknown parameters.
 
-rng = np.random.default_rng(33093)
+# Simulation control
+rng = np.random.default_rng(29732)
 t_max = 200
 
-# "True" parameters
+# Parameters and initial state
 N_0 = 25
 alive = np.full(N_0, True)  # alive state
 b = np.full(N_0, 0.25)      # birth rate
 m = np.full(N_0, 0.2)       # death rate
 c_true = 0.001              # per capita competition effect on mortality
 
-# Generate data
+# Simulate IBM and snap to equal spaced time grid
 N_obs, t_obs = birth_death_ibm_dd(alive, b, m, c_true, t_max, rng)
 
 # Observed summary statistic (e.g. the data itself on a regular grid)
-t_grid = np.linspace(0, 200, 50)
+t_grid = np.linspace(0, 200)   # length 50 vector
 N_obs_grid = regularize_series(N_obs, t_obs, t_grid)
+
+# Here's what it looks like
+plt.figure()
+plt.plot(t_grid, N_obs_grid)
+plt.xlabel("Time")
+plt.ylabel("N")
+plt.ylim(bottom=0)
+
+
+# ABC rejection algorithm
+# Basic algorithm is 7 lines of code
+# Train c
+
+n_samples = 10000
+tol = 15 #roughly top 1% of simulations
+c_posterior = []
+for i in range(n_samples):
+
+    # draw c from prior
+    c = rng.uniform(0.0002, 0.003)
+
+    # simulate the model
+    N_sim, t_sim = birth_death_ibm_dd(alive, b, m, c, t_max, rng)
+
+    # summary statistic
+    N_sim_grid = regularize_series(N_sim, t_sim, t_grid)
+
+    # distance between statistics
+    d = np.sqrt(np.mean((N_sim_grid - N_obs_grid)**2))
+
+    # accept or reject as posterior sample
+    if d < tol:
+        c_posterior.append(c)
+
+    # monitor progress
+    if i % 1000 == 0:
+        print(i)
+
+
+# Posterior (and prior) distribution
+c_prior = rng.uniform(0.0002, 0.003, n_samples)
+plt.figure()
+plt.hist(c_prior, bins=40, density=True, alpha=0.4, label="prior")
+plt.hist(c_posterior, bins=20, density=True, alpha=0.7, label="posterior")
+plt.axvline(c_true, color="blue", label="true value")
+plt.xlabel("c")
+plt.ylabel("Density")
+plt.legend()
+
+print(len(c_posterior))      # number accepted
+print(np.mean(c_posterior))  # posterior mean
+print(c_true)                # true c
+
+
+# Here is a Visualization of the rejection algorithm
+# 500 iterations
+
+from matplotlib.lines import Line2D
+
+plt.figure()
+for i in range(500):
+
+    # draw c from prior
+    c = rng.uniform(0.0002, 0.003)
+
+    # simulate the model
+    N_sim, t_sim = birth_death_ibm_dd(alive, b, m, c, t_max, rng)
+
+    # summary statistic
+    N_sim_grid = regularize_series(N_sim, t_sim, t_grid)
+
+    # distance between statistics
+    d = np.sqrt(np.mean((N_sim_grid - N_obs_grid)**2))
+
+    # accept or reject as posterior sample
+    if d < tol:
+        plt.plot(t_grid, N_sim_grid, color="C1", alpha=0.5)
+    else:
+        plt.plot(t_grid, N_sim_grid, color="lightgray", alpha=0.1)
+
+plt.plot(t_grid, N_obs_grid, color="black")
+
+legend_elements = [
+    Line2D([0], [0], color="black", label="Observed"),
+    Line2D([0], [0], color="C1", label="Accepted"),
+    Line2D([0], [0], color="lightgray", label="Rejected")
+]
+
+plt.legend(handles=legend_elements)
+plt.xlabel("Time")
+plt.ylabel("N")
