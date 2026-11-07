@@ -10,10 +10,11 @@ You need to read the paper plus submit a small written reflection (except for th
 ## Thursday
 
 * Leader: VP
-* Buckley & Roughgarden (2006). Climate, competition, and the coexistence of island lizards. Functional Ecology 20:315-322. https://doi.org/10.1111/j.1365-2435.2006.01095.x.
+* Buckley & Roughgarden (2006). Climate, competition, and the coexistence of island lizards. **Functional Ecology** 20:315-322. https://doi.org/10.1111/j.1365-2435.2006.01095.x.
 
 ## Questions to consider for the papers
-(Depending on the paper, not all are necessarily relevant or might need to be adapted, e.g. if there are multiple models or case studies, you could focus on one)
+
+Depending on the paper, not all questions are necessarily relevant or might need to be adapted, e.g. if there are multiple models or case studies, you could focus on one.
 
 * What is the biological or ecological question being addressed?
   * How is a model helpful to answer the question?
@@ -27,7 +28,7 @@ You need to read the paper plus submit a small written reflection (except for th
   * What are the state variables? (quantities the model tracks)
   * What biological processes are included?
   * How are biological processes represented? (functions, algorithms, probability distributions)
-  * If modeled above the individual level (e.g. as an ODE), how do functions relate to what individuals (or lower level units) are doing?
+  * If modeled above the individual level (e.g. as an ODE), how do functions relate to **events** that happen to **individuals** (or lower level units)?
   * How are observation processes represented?
   * If stochastic, what are the sources of stochasticity? (demographic, environmental, observation error, other)
 * Identify and describe the parameters of the model
@@ -56,4 +57,4 @@ You need to read the paper plus submit a small written reflection (except for th
 
 ## Discussion leaders
 
-Everybody will consider the questions above for each paper. The discussion leader will in addition prepare a presentation (e.g. powerpoint, google slides, beamer) that answers each of the **first 8** questions (the what and how). The leader should go into a little bit of detail for each question (e.g. one slide per question; no more than two slides) highlighting especially any method details we haven't already covered in the first part of the course.  The overview presentation will be about 15 minutes. The discussion leader should also think of 2-3 key questions to ask of the group as discussion points. These questions should go beyond summarizing the paper and instead encourage evaluation of the modeling choices, assumptions, inference methods, and biological conclusions. The discussion leader doesn't need to submit a written reflection but should submit their presentation.
+Everybody will consider the questions above for each paper. The discussion leader will in addition prepare a presentation (e.g. powerpoint, google slides, beamer) that answers each of the **first 8** questions (the what, how, and why). The leader should go into a little bit of detail for each question (e.g. one slide per question; no more than two slides) highlighting especially any method details we haven't already covered in the first part of the course.  The overview presentation will be about 15 minutes. The discussion leader should also think of 2-3 key questions to ask of the group as discussion points. These questions should go beyond summarizing the paper and instead encourage evaluation of the modeling choices, assumptions, inference methods, and biological conclusions. The discussion leader doesn't need to submit a written reflection but should submit their presentation.
