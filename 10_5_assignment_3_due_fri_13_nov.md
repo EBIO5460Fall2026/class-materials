@@ -85,7 +85,7 @@ prevalence = infected_sample / sample_size
 
 Turn the following mathematical description of the biological processes into code.
 
-We assume the colony is closed, i.e. no immigration or emigration. The colony migrates and roosts together. Individuals can be in one of four states:
+We assume the colony is closed, i.e. no immigration or emigration because the colony migrates and roosts together. Individuals can be in one of four states:
 
 * S, Susceptible
 * I, Infected
@@ -102,7 +102,7 @@ $\alpha$
 
 is the transmission probability for a single infected bat. The force of infection is then:
 
-$FOI_t = 1 - (1 - \alpha)^{I_t}$
+$F_t = 1 - (1 - \alpha)^{I_t}$
 
 where $I_t$ is the number infected.
 
@@ -110,7 +110,7 @@ where $I_t$ is the number infected.
 
 New infections ("**C**ases") are
 
-$C_t \sim \text{Binomial}(S_t, FOI_t)$
+$C_t \sim \text{Binomial}(S_t, F_t)$
 
 ### Infection resolution
 
@@ -239,11 +239,11 @@ Questions:
 
 Now code an analogous model that ignores demographic stochasticity. Replace the stochastic process terms with their expectations, e.g.
 
-$C_t \sim \text{Binomial}(S_t,FOI_t)$
+$C_t \sim \text{Binomial}(S_t,F_t)$
 
 becomes
 
-$C_t = FOI_t S_t$
+$C_t = F_t S_t$
 
 The process model is now deterministic. Keep the same stochastic observation model.
 
@@ -270,7 +270,7 @@ Questions:
 
 # Bayesian inference using JAGS
 
-Train the **observation-error-only model** using JAGS. Stan is more difficult for the full state-space model because of the discrete latent states.
+Train the **observation-error-only model** using JAGS. We could instead easily use Stan for this model but there is an optional challenge to fit the full state-space model (including both process and observation uncertainty) and Stan is more difficult then because of the discrete latent states ($N_t$).
 
 Hint: the JAGS model code will closely resemble the simulation code.
 
@@ -306,7 +306,7 @@ Before fitting the real data:
 3. Compare estimated parameters to the known values
 4. Try this a few times
 
-If the estimated parameters are about right, this provides evidence that the JAGS model behaves as intended.
+If the estimated parameters are about right, this provides evidence that the JAGS model is working as intended.
 
 ### Rubric
 
