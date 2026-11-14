@@ -22,10 +22,10 @@ Below are assignment due dates and a record of the topics we covered each week t
 | ---- | ---- | ---- | -------- | ------------------------------------------------------------ |
 |  MM  | 13   | Tue  | 10 Nov    | Kéry et al (2013). Analysing and mapping species range dynamics using occupancy models. |
 |  VP | 13   | Thu  | 12 Nov    | Buckley & Roughgarden (2006). Climate, competition, and the coexistence of island lizards. |
-|  PM  | 14   | Tue  | 17 Nov   |  |
-|  JH  | 14   | Thu  | 19 Nov   |  |
+|  PM  | 14   | Tue  | 17 Nov   | Stewart Merrill et al (2021). Host controls of within-host disease dynamics. |
+|  SS  | 14   | Thu  | 19 Nov   |  |
 |  AP | 15   | Tue  | 1 Dec   |  |
-|  SS  | 15   | Thu  | 3 Dec   |  |
+|  JH  | 15   | Thu  | 3 Dec   |  |
 
 
 
