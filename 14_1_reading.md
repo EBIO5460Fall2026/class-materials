@@ -7,11 +7,10 @@ You need to read the paper plus submit a small written reflection (except for th
 * Leader: PM
 * Stewart Merrill et al (2021). Host controls of within-host disease dynamics: insight from an invertebrate system. **The American Naturalist** 198:317-332. https://doi.org/10.1086/715355.
 
-
 ## Thursday
 
 * Leader: SS
-* TBA
+* Kéfi et al (2007). Spatial vegetation patterns and imminent desertification in Mediterranean arid ecosystems. **Nature** 449:213-217. https://doi.org/10.1038/nature06111.
 
 ## Questions to consider for the papers
 
