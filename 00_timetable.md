@@ -25,7 +25,7 @@ Below are assignment due dates and a record of the topics we covered each week t
 |  PM  | 14   | Tue  | 17 Nov   | Stewart Merrill et al (2021). Host controls of within-host disease dynamics. |
 |  SS  | 14   | Thu  | 19 Nov   | Kéfi et al (2007). Spatial vegetation patterns and imminent desertification in Mediterranean arid ecosystems. |
 |  AP | 15   | Tue  | 1 Dec   | Llabrés et al (2025). A spatial numerical model for seagrass–herbivore interactions and the formation of reef halos. |
-|  JH  | 15   | Thu  | 3 Dec   |  |
+|  JH  | 15   | Thu  | 3 Dec   | Minucci et al (2021). Inferring pesticide toxicity to honey bees from a field-based feeding study using a colony model and Bayesian inference. |
 
 
 

@@ -10,7 +10,7 @@ You need to read the paper plus submit a small written reflection (except for th
 ## Thursday
 
 * Leader: JH
-* TBA
+* Minucci et al (2021). Inferring pesticide toxicity to honey bees from a field-based feeding study using a colony model and Bayesian inference. **Ecological Applications** 31:e02442. https://doi.org/10.1002/eap.2442.
 
 ## Questions to consider for the papers
 
